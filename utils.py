@@ -19,34 +19,13 @@ def get_minor_versions_in_range(start_version, end_version, minor_versions):
     return spanned_versions
 
 def parse_version(version_str):
-    # Pattern to match "<at_least_one_digit>.<at_least_one_digit>.<at_least_one_digit>"
-    pattern_full = r'^(\d+)\.(\d+)\.(\d+)$'
 
-    # Pattern to match "v<at_least_one_digit>.<at_least_one_digit>.<at_least_one_digit>"
-    pattern_v_full = r'^v(\d+)\.(\d+)\.(\d+)$'
-
-    # Pattern to match "<at_least_one_digit>.<at_least_one_digit>"
-    pattern_minor = r'^(\d+)\.(\d+)$'
-
-    # Pattern to match "v<at_least_one_digit>.<at_least_one_digit>"
-    pattern_v_minor = r'^v(\d+)\.(\d+)$'
+    pattern = r'^(v)?(\d+)\.(\d+)(\.\d+)?$'
 
     # Check for the full version pattern
-    match_full = re.match(pattern_full, version_str)
-    match_v_full = re.match(pattern_v_full, version_str)
+    match = re.match(pattern, version_str, re.IGNORECASE)
 
-    if match_full:
-        return Version(version_str)
-    elif match_v_full:
-        return Version(match_v_full.group(1, 2, 3))
-
-    # Check for the minor version pattern
-    match_minor = re.match(pattern_minor, version_str)
-    match_v_minor = re.match(pattern_v_minor, version_str)
-
-    if match_minor:
-        return Version(f'{version_str}.0')
-    elif match_v_minor:
-        return Version(f'v{match_v_minor.group(1)}.{match_v_minor.group(2)}.0')
+    if match:
+        return Version(f'{match.group(2)}.{match.group(3)}.{match.group(4)[1:] if match.group(4) else "0"}')
 
     raise ValueError(f'Invalid version format: {version_str}')
