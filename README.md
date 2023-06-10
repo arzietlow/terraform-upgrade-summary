@@ -20,7 +20,7 @@ Version format: Patch numbers are optional, but **major.minor** MUST be present.
 
 ## How it works
 
-1. The script first reads the "main" changelog from the Terraform GitHub repository (`https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md`).
+1. The script first reads the "main" changelog from [the Terraform GitHub repository](https://github.com/hashicorp/terraform/blob/main/CHANGELOG.md).
 2. It extracts the list of all minor versions of Terraform from the main changelog.
 3. Based on the input lower and upper versions, the script determines which minor version changelogs need to be parsed.
 4. The script loads the required changelog files and compiles data for each release version that falls within the specified upgrade.
