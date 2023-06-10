@@ -16,7 +16,7 @@ Replace `<lower_version>` and `<upper_version>` with the Terraform versions you 
 python3 my_python_script.py 0.13.4 1.4.6
 ```
 
-Version format: Patch numbers are optional, but <major>.<minor> MUST be present.
+Version format: Patch numbers are optional, but "major.minor" MUST be present.
 
 ## How it works
 
