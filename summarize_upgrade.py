@@ -3,13 +3,13 @@ import json
 import pyfiglet
 from tabulate import tabulate
 from semantic_version import Version
-from utils import (
+from upgrade_summary.utils import (
     parse_version,
     is_version_within_range,
     get_minor_versions_in_range,
     print_terraform_updates
 )
-from changelog import (
+from upgrade_summary.changelog import (
     parse_minor_versions_from_root_changelog_markdown,
     gather_markdown_sections_by_version,
     parse_section
@@ -85,7 +85,7 @@ def main():
     summary_table_headers = ['UPGRADE ASPECT', 'COUNT']
     summary_table = []
     for aspect in upgrade_aspects:
-        summary_table.append([aspect.replace('_', ' ').upper(), len(upgrade_aspects[aspect])])
+        summary_table.append([aspect.replace('_', ' ').upper(), len(upgrade_aspects[aspect]) if len(upgrade_aspects[aspect]) != 0 else "NONE"])
     print(tabulate(summary_table, summary_table_headers, tablefmt="simple"), '\n')
     print("This upgrade spans a total of {} releases".format(len(release_versions)), '\n')
     print_terraform_updates(formatted_data)

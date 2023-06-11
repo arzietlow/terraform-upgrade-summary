@@ -65,7 +65,7 @@ def gather_markdown_sections_by_version(url):
         print("Error occurred during the HTTP request:", e)
         return None
     
-def parse_section(markdown_text):
+def parse_section0(markdown_text):
     '''
         Parses a SECTION's Markdown text (corresponding to 1 released version of Terraform) and extracts different sections and bullet points from it.
 
@@ -117,5 +117,36 @@ def parse_section(markdown_text):
             if section_name == 'UPGRADE NOTES AND BREAKING CHANGES': result_field = 'breaking_changes'
             elif section_name == 'NOTE': result_field = 'notes'
             result[result_field] = bullet_points
+
+    return result
+
+import re
+
+def parse_section(markdown_text):
+    result = {
+        'bug_fixes': [],
+        'enhancements': [],
+        'upgrade_notes': [],
+        'new_features': [],
+        'security_notes': [],
+        'notes': [],
+        'experiments': [],
+        'breaking_changes': []
+    }
+
+    pattern = r'\b([A-Z\s]+):\s*\n\s*((?:.*?\n)*?)(?=\n\n|\Z|\b[A-Z\s]+:)'
+    sections = re.findall(pattern, markdown_text, re.DOTALL)
+
+    for i, (section_name, bullet_points) in enumerate(sections):
+        section_name = section_name.strip().lower().replace(' ', '_')
+        if 'breaking' in section_name:
+            section_name = 'breaking_changes'
+        elif section_name == 'note':
+            section_name = 'notes'
+        bullet_points = bullet_points.strip()  # Trim leading/trailing whitespace
+        if i > 0:
+            bullet_points = bullet_points.lstrip('\n')  # Remove leading newline
+        bullet_points = re.split(r'\n\n\*', bullet_points)
+        result[section_name] = bullet_points
 
     return result
