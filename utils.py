@@ -29,3 +29,20 @@ def parse_version(version_str):
         return Version(f'{match.group(2)}.{match.group(3)}.{match.group(4)[1:] if match.group(4) else "0"}')
 
     raise ValueError(f'Invalid version format: {version_str}')
+
+def print_terraform_updates(updates, indent=0):
+    if isinstance(updates, str):
+        updates = eval(updates)
+
+    for key, value in updates.items():
+        print("  " * indent + key + ":")
+        if isinstance(value, dict):
+            print_terraform_updates(value, indent + 1)
+        else:
+            if isinstance(value, str):
+                if '\n' in value:
+                    bullet_points = value.split("\n")
+                    for bullet_point in bullet_points:
+                        print("  " * (indent + 1) + bullet_point.strip())
+                else:
+                    print("  " * (indent + 1) + value)

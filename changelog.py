@@ -94,8 +94,10 @@ def parse_section(markdown_text):
         'NEW FEATURES',
         'SECURITY NOTES',
         'NOTES',
+        'NOTE',
         'EXPERIMENTS',
-        'BREAKING CHANGES'
+        'BREAKING CHANGES',
+        'UPGRADE NOTES AND BREAKING CHANGES'
     ]
 
     # Extract headers using regex
@@ -112,6 +114,8 @@ def parse_section(markdown_text):
         bullet_points = re.findall(r'\*\s+(.*)', section[1])
         if bullet_points:
             result_field = section_name.lower().replace(' ', '_')
+            if section_name == 'UPGRADE NOTES AND BREAKING CHANGES': result_field = 'breaking_changes'
+            elif section_name == 'NOTE': result_field = 'notes'
             result[result_field] = bullet_points
 
     return result

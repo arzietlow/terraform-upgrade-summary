@@ -41,6 +41,7 @@ The script requires the following dependencies:
 - Python 3
 - Requests
 - Semantic-version
+- Pyfiglet
 
 ## License
 
