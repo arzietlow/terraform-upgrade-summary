@@ -1,6 +1,7 @@
 import sys
 import json
 import pyfiglet
+from tabulate import tabulate
 from semantic_version import Version
 from utils import (
     parse_version,
@@ -48,22 +49,16 @@ def main():
 
     # print(all_changes)
 
-    upgrade_aspects = [
-        'breaking_changes',
-        'upgrade_notes',
-        'security_notes',
-        'bug_fixes',
-        'new_features',
-        'enhancements',
-        'notes',
-        'experiments'
-    ]
-
-    # for minor_version in all_changes:
-    #     for release in all_changes[minor_version]:
-    #         for update_aspect in all_changes[minor_version][release]:
-    #             if all_changes[minor_version][release][update_aspect]:
-    #                 total_upgrade[update_aspect].extend(all_changes[minor_version][release][update_aspect])
+    upgrade_aspects = {
+        'breaking_changes': [],
+        'upgrade_notes': [],
+        'security_notes': [],
+        'bug_fixes': [],
+        'new_features': [],
+        'enhancements': [],
+        'notes': [],
+        'experiments': []
+    }
 
     # Organize upgrade details
     organized_upgrade = {}
@@ -77,16 +72,23 @@ def main():
                 if content: organized_upgrade[header][minor_version] = {}
             if content: 
                 organized_upgrade[header][minor_version][release] = '\n'.join(f"* - {bulletpoint}" for bulletpoint in content)
+                for bulletpoint in content:
+                    upgrade_aspects[aspect].append(bulletpoint)
 
     formatted_data = json.dumps(organized_upgrade)
     formatted_data = formatted_data.replace('{}', '"NONE FOUND"')
-    # # formatted_data = formatted_data.replace('{\n', '').replace('\n}', '').replace('\\n', '\n').replace('\\"', '"').replace("{}", "NONE FOUND")
     header = pyfiglet.figlet_format("TERRAFORM UPGRADE SUMMARY", font='big')
     sub_header = f"(for versions {lower_version} -> {higher_version})\n"
-    print(header, sub_header)
-    print_terraform_updates(formatted_data)
 
-    print("THIS UPGRADE SPANS A TOTAL OF {} releases".format(release_versions))
+    # PRINT OUTPUT 
+    print(header, sub_header)
+    summary_table_headers = ['UPGRADE ASPECT', 'COUNT']
+    summary_table = []
+    for aspect in upgrade_aspects:
+        summary_table.append([aspect.replace('_', ' ').upper(), len(upgrade_aspects[aspect])])
+    print(tabulate(summary_table, summary_table_headers, tablefmt="simple"), '\n')
+    print("This upgrade spans a total of {} releases".format(len(release_versions)), '\n')
+    print_terraform_updates(formatted_data)
 
 if __name__ == "__main__":
     main()

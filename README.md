@@ -29,7 +29,7 @@ Version format: Patch numbers are optional, but **major.minor** MUST be present.
 
 ## Output
 
-The script generates a detailed and easily-digestible (by chatGPT) summary of the Terraform upgrade. The output includes the following information:
+The script generates a detailed and easily-digestible summary of the Terraform upgrade. The output includes the following information:
 
 - Total number of unique bug fixes, enhancements, and features implemented.
 - Detailed breakdown of changes for each version, categorized by the area of Terraform they concern (e.g., core, config, cli, backend, provisioner, etc.) when applicable.
@@ -42,6 +42,12 @@ The script requires the following dependencies:
 - Requests
 - Semantic-version
 - Pyfiglet
+- Tabulate
+
+## Limitations
+
+The Terraform changelogs do not adhere to any strict formatting rules, so this project may stop working if Hashicorp changes their changelog format. The project also does not guarantee that no details will be missed by the scan.
+Additionally, this project is NOT useful for summarizing upgrades that start from a version prior to 0.12.0, as the changelog format appears to have been standardized only from that release onwards.
 
 ## License
 
