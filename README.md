@@ -7,7 +7,7 @@ This script generates a summary of important details from the changelogs of a Te
 To execute the script, run the following command:
 
 ```shell
-python3 summarize_upgrade.py <lower_version> <upper_version>
+python3 summarize_upgrade.py <lower_version> <upper_version> > upgrade_summary.txt
 ```
 
 Replace `<lower_version>` and `<upper_version>` with the Terraform versions you want to compare. For example:
