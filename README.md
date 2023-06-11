@@ -62,7 +62,7 @@ Additionally, this project is NOT useful for summarizing upgrades that start fro
 
 ## Testing
 
-Test can be run from the root project directory:
+Tests can be run from the root project directory:
 ```shell
 $ python -m unittest test/changelog_test.py 
 ```
