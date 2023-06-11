@@ -124,9 +124,7 @@ def parse_section(markdown_text):
 
     return result
 
-import re
-
-def parse_section1(markdown_text):
+def parse_section_verbose(markdown_text):
     result = {
         'bug_fixes': [],
         'enhancements': [],
@@ -137,8 +135,8 @@ def parse_section1(markdown_text):
         'experiments': [],
         'breaking_changes': []
     }
-
-    pattern = r'\b([A-Z\s]+):\s*\n\s*((?:.*?\n)*?)(?=\n\n|\Z|\b[A-Z\s]+:)'
+    
+    pattern = r'([A-Z\s]{4,}):?\n+(.*?)(?=\Z|\b[A-Z\s]+:|$)'
     sections = re.findall(pattern, markdown_text, re.DOTALL)
 
     for i, (section_name, bullet_points) in enumerate(sections):
@@ -152,5 +150,4 @@ def parse_section1(markdown_text):
             bullet_points = bullet_points.strip('\n')  # Remove leading newline
         bullet_points = re.split(r'\n\n\*', bullet_points)
         result[section_name] = bullet_points
-
     return result

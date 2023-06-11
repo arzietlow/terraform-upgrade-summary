@@ -13,10 +13,21 @@ python3 summarize_upgrade.py <lower_version> <upper_version> > upgrade_summary.t
 Replace `<lower_version>` and `<upper_version>` with the Terraform versions you want to compare. For example:
 
 ```shell
-python3 summarize_upgrade.py 0.13.4 1.4.6
+python3 summarize_upgrade.py 0.13.4 1.4.6 > tf_upgrade.txt
 ```
 
+### Input format
+
 Version format: Patch numbers are optional, but **major.minor** MUST be present.
+
+### Verbose mode
+
+The script can also be run in "verbose" mode by passing -v or --verbose. 
+Verbose mode is more likely to grab additional text beyond just bullet points. It can be useful for gathering extra info but may slightly inflate the numbers of upgrade aspects found.
+
+```shell
+python summarize_upgrade.py 0.12 1.6 -v > full_upgrade_verbose.txt
+```
 
 ## How it works
 
@@ -48,6 +59,13 @@ The script requires the following dependencies:
 
 The Terraform changelogs do not adhere to any strict formatting rules, so this project may stop working if Hashicorp changes their changelog format. The project also does not guarantee that no details will be missed by the scan.
 Additionally, this project is NOT useful for summarizing upgrades that start from a version prior to 0.12.0, as the changelog format appears to have been standardized only from that release onwards.
+
+## Testing
+
+Test can be run from the root project directory:
+```shell
+$ python -m unittest test/changelog_test.py 
+```
 
 ## License
 

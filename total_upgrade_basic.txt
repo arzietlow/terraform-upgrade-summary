@@ -27,11 +27,11 @@
 UPGRADE ASPECT      COUNT
 ----------------  -------
 BREAKING CHANGES       29
-UPGRADE NOTES          43
+UPGRADE NOTES          48
 SECURITY NOTES          1
 BUG FIXES             487
-NEW FEATURES           34
-ENHANCEMENTS          217
+NEW FEATURES           37
+ENHANCEMENTS          218
 NOTES                  10
 EXPERIMENTS            10 
 
@@ -855,7 +855,7 @@ ENHANCEMENTS:
       * - Terraform now prints a warning when adding an attribute to `ignore_changes` that is managed only by the provider. Specifying non-configurable attributes in `ignore_changes` has no effect because `ignore_changes` tells Terraform to ignore future changes made in the configuration. ([#30517](https://github.com/hashicorp/terraform/issues/30517))
       * - `terraform show -json` now includes exact type information for output values. ([#30945](https://github.com/hashicorp/terraform/issues/30945))
       * - The `ssh` provisioner connection now supports SSH over HTTP proxy. ([#30274](https://github.com/hashicorp/terraform/pull/30274))
-      * - * The SSH client for provisioners now supports newer key algorithms, allowing it to connect to servers running more recent versions of OpenSSH. ([#30962](https://github.com/hashicorp/terraform/issues/30962))
+      * The SSH client for provisioners now supports newer key algorithms, allowing it to connect to servers running more recent versions of OpenSSH. ([#30962](https://github.com/hashicorp/terraform/issues/30962))
   1.1:
     1.1.9:
       * - cli: Terraform now supports [run tasks](https://www.terraform.io/cloud-docs/workspaces/settings/run-tasks), a Terraform Cloud integration for executing remote operations, for the post plan stage of a run.

@@ -1,6 +1,7 @@
 import sys
 import json
 import pyfiglet
+import argparse
 from tabulate import tabulate
 from semantic_version import Version
 from upgrade_summary.utils import (
@@ -12,15 +13,23 @@ from upgrade_summary.utils import (
 from upgrade_summary.changelog import (
     parse_minor_versions_from_root_changelog_markdown,
     gather_markdown_sections_by_version,
-    parse_section
+    parse_section,
+    parse_section_verbose
 )
 
 def main():
-
     ROOT_CHANGELOG_URL = "https://raw.githubusercontent.com/hashicorp/terraform/main/CHANGELOG.md"
     MINOR_VERSION_CHANGELOG_URL_TEMPLATE = "https://raw.githubusercontent.com/hashicorp/terraform/v{}/CHANGELOG.md"
 
-    if len(sys.argv) != 3:
+    # Set up arguments
+    parser = argparse.ArgumentParser(description='Terraform upgrade summarizer')
+    parser.add_argument('lower_version', help='Beginning version')
+    parser.add_argument('higher_version', help='Ending version')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose mode')
+    args = parser.parse_args()
+    parse_fn = parse_section_verbose if args.verbose else parse_section
+
+    if not len(sys.argv) >= 3:
         print("Usage: python3 summarize_upgrade.py <lower_version> <higher_version>")
         return
     try:
@@ -45,7 +54,7 @@ def main():
         for release in all_releases_for_version:
             if is_version_within_range(release, lower_version, higher_version):
                 release_versions.append(release)
-                all_changes[minor_version][release] = parse_section(all_releases_for_version[release])
+                all_changes[minor_version][release] = parse_fn(all_releases_for_version[release]) # Calls either parse_section or parse_section_verbose
 
     # print(all_changes)
 
@@ -71,9 +80,11 @@ def main():
             if minor_version not in organized_upgrade[header]: 
                 if content: organized_upgrade[header][minor_version] = {}
             if content: 
-                organized_upgrade[header][minor_version][release] = '\n'.join(f"* - {bulletpoint}" for bulletpoint in content)
+                organized_upgrade[header][minor_version][release] = '\n'.join(f"* - {bulletpoint}" if not bulletpoint.startswith('* ') else bulletpoint for bulletpoint in content)
                 for bulletpoint in content:
-                    upgrade_aspects[aspect].append(bulletpoint)
+                    if '* ' in bulletpoint:
+                        upgrade_aspects[aspect].extend(bulletpoint.split('* '))
+                    else: upgrade_aspects[aspect].append(bulletpoint)
 
     formatted_data = json.dumps(organized_upgrade)
     formatted_data = formatted_data.replace('{}', '"NONE FOUND"')
