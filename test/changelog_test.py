@@ -44,14 +44,14 @@ class TestParseSection(unittest.TestCase):
         '''
 
         expected_result = {
-            "bug_fixes": ["Fixed issue with component Y.\n            * Addressed security vulnerability."],
-            "enhancements": ["Added support for feature X.\n            * Improved performance."],
-            "upgrade_notes": ["Please note the breaking changes in version 2.0."],
-            "new_features": ["Introducing feature Z.\n            * Added support for module ABC."],
-            "security_notes": ["Improved authentication mechanisms."],
-            "notes": ["Some additional notes."],
-            "experiments": ["Experimental feature A is now available."],
-            "breaking_changes": ["Breaking change: Removed deprecated function B.\n            * Breaking change: Updated library C to version 1.0.\n            * Upgrade note: Please update your credentials."]
+            'bug_fixes': ['Fixed issue with component Y.', 'Addressed security vulnerability.'],
+            'enhancements': ['Added support for feature X.', 'Improved performance.'],
+            'upgrade_notes': ['Please note the breaking changes in version 2.0.'],
+            'new_features': ['Introducing feature Z.', 'Added support for module ABC.'],
+            'security_notes': ['Improved authentication mechanisms.'],
+            'notes': ['Some additional notes.'],
+            'experiments': ['Experimental feature A is now available.'],
+            'breaking_changes': ['Updated API endpoints.', 'Modified configuration format.', 'Breaking change: Removed deprecated function B.', 'Breaking change: Updated library C to version 1.0.', 'Upgrade note: Please update your credentials.']
         }
 
         result = parse_section(markdown_text)

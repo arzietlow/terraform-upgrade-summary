@@ -65,7 +65,7 @@ def gather_markdown_sections_by_version(url):
         print("Error occurred during the HTTP request:", e)
         return None
     
-def parse_section0(markdown_text):
+def parse_section(markdown_text):
     '''
         Parses a SECTION's Markdown text (corresponding to 1 released version of Terraform) and extracts different sections and bullet points from it.
 
@@ -101,7 +101,8 @@ def parse_section0(markdown_text):
     ]
 
     # Extract headers using regex
-    pattern = r'(' + '|'.join(headers) + r')(.*?)(?=(?:' + '|'.join(headers) + r')|$)'
+    pattern = r'(' + '|'.join(headers) + r')(.*?)(?=(?:' + '|'.join(headers) + r')|$|\b[A-Z\s]+:)'
+    # pattern = r'(' + '|'.join(headers) + r')(.*?)(?=(?:' + '|'.join(headers) + r')|\n\n|\Z|\b[A-Z\s]+:)'
     sections = re.findall(pattern, markdown_text, re.DOTALL)
 
     # # Use regex to extract bugfixes and enhancements
@@ -116,13 +117,16 @@ def parse_section0(markdown_text):
             result_field = section_name.lower().replace(' ', '_')
             if section_name == 'UPGRADE NOTES AND BREAKING CHANGES': result_field = 'breaking_changes'
             elif section_name == 'NOTE': result_field = 'notes'
-            result[result_field] = bullet_points
+            if result[result_field]: 
+                result[result_field].extend(bullet_points)
+            else:
+                result[result_field] = bullet_points
 
     return result
 
 import re
 
-def parse_section(markdown_text):
+def parse_section1(markdown_text):
     result = {
         'bug_fixes': [],
         'enhancements': [],
@@ -145,7 +149,7 @@ def parse_section(markdown_text):
             section_name = 'notes'
         bullet_points = bullet_points.strip()  # Trim leading/trailing whitespace
         if i > 0:
-            bullet_points = bullet_points.lstrip('\n')  # Remove leading newline
+            bullet_points = bullet_points.strip('\n')  # Remove leading newline
         bullet_points = re.split(r'\n\n\*', bullet_points)
         result[section_name] = bullet_points
 
