@@ -58,7 +58,8 @@ The script requires the following dependencies:
 ## Limitations
 
 The Terraform changelogs do not adhere to any strict formatting rules, so this project may stop working if Hashicorp changes their changelog format. The project also does not guarantee that no details will be missed by the scan.
-Additionally, this project is NOT useful for summarizing upgrades that start from a version prior to 0.12.0, as the changelog format appears to have been standardized only from that release onwards.
+Additionally, this project is NOT useful (...) for summarizing upgrades that start from a version prior to 0.12.0, as the changelog format appears to have been standardized only from that release onwards.
+This project purely uses regular expressions rather than a dedicated Markdown-parsing Python package. So that probably wasted a lot of time.
 
 ## Testing
 
